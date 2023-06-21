@@ -1,35 +1,11 @@
-# [Bindings  This](https://svelte.dev/tutorial/bind-this)
+# [Bindings  Component bindings](https://svelte.dev/tutorial/component-bindings)
 
-The readonly `this` binding applies to every element (and component) and allows you to obtain a reference to rendered elements. For example, we can get a reference to a `<canvas>` element:
-
-```svelte
-<canvas
-  bind:this={canvas}
-  width={32}
-  height={32}
-></canvas>
-```
-
-Note that the value of `canvas` will be `undefined` until the component has mounted, so we put the logic inside the `onMount` [lifecycle function](https://svelte.dev/tutorial/onmount).
-
-## NOTE
-
-> App.svelte 변경
+Just as you can bind to properties of DOM elements, you can bind to component props. For example, we can bind to the `value` prop of this `<Keypad>` component as though it were a form element:
 
 ```svelte
-<!-- BEFORE -->
-<style>
-	canvas {
-		-webkit-mask: url(/svelte-logo-mask.svg) 50% 50% no-repeat;
-		mask: url(/svelte-logo-mask.svg) 50% 50% no-repeat;
-	}
-</style>
-
-<!-- AFTER -->
-<style>
-	canvas {
-		-webkit-mask: url(https://svelte.dev/svelte-logo-mask.svg) 50% 50% no-repeat;
-		mask: url(https://svelte.dev/svelte-logo-mask.svg) 50% 50% no-repeat;
-	}
-</style>
+<Keypad bind:value={pin} on:submit={handleSubmit}/>
 ```
+
+Now, when the user interacts with the keypad, the value of `pin` in the parent component is immediately updated.
+
+> Use component bindings sparingly. It can be difficult to track the flow of data around your application if you have too many of them, especially if there is no 'single source of truth'.
