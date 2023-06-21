@@ -1,15 +1,35 @@
-# [Bindings  Dimensions](https://svelte.dev/tutorial/dimensions)
+# [Bindings  This](https://svelte.dev/tutorial/bind-this)
 
-Every block-level element has `clientWidth`, `clientHeight`, `offsetWidth` and `offsetHeight` bindings:
+The readonly `this` binding applies to every element (and component) and allows you to obtain a reference to rendered elements. For example, we can get a reference to a `<canvas>` element:
 
 ```svelte
-<div bind:clientWidth={w} bind:clientHeight={h}>
-  <span style="font-size: {size}px">{text}</span>
-</div>
+<canvas
+  bind:this={canvas}
+  width={32}
+  height={32}
+></canvas>
 ```
 
-These bindings are readonly — changing the values of `w` and `h` won't have any effect.
+Note that the value of `canvas` will be `undefined` until the component has mounted, so we put the logic inside the `onMount` [lifecycle function](https://svelte.dev/tutorial/onmount).
 
-> Elements are measured using a technique similar to [this one](http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/). There is some overhead involved, so it's not recommended to use this for large numbers of elements.
-> 
-> `display: inline` elements cannot be measured with this approach; nor can elements that can't contain other elements (such as `<canvas>`). In these cases you will need to measure a wrapper element instead.
+## NOTE
+
+> App.svelte 변경
+
+```svelte
+<!-- BEFORE -->
+<style>
+	canvas {
+		-webkit-mask: url(/svelte-logo-mask.svg) 50% 50% no-repeat;
+		mask: url(/svelte-logo-mask.svg) 50% 50% no-repeat;
+	}
+</style>
+
+<!-- AFTER -->
+<style>
+	canvas {
+		-webkit-mask: url(https://svelte.dev/svelte-logo-mask.svg) 50% 50% no-repeat;
+		mask: url(https://svelte.dev/svelte-logo-mask.svg) 50% 50% no-repeat;
+	}
+</style>
+```
