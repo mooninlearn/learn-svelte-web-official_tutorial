@@ -1,16 +1,14 @@
-# [Logic  Else blocks](https://svelte.dev/tutorial/else-blocks)
+# [Logic  Else-if blocks](https://svelte.dev/tutorial/else-if-blocks)
 
-Since the two conditions — `if user.loggedIn` and `if !user.loggedIn` — are mutually exclusive, we can simplify this component slightly by using an `else` block:
+Multiple conditions can be 'chained' together with else if:
 
 ```svelte
-{#if user.loggedIn}
-  <button on:click={toggle}>
-    Log out
-  </button>
+{#if x > 10}
+	<p>{x} is greater than 10</p>
+{:else if 5 > x}
+	<p>{x} is less than 5</p>
 {:else}
-  <button on:click={toggle}>
-    Log in
-  </button>
+	<p>{x} is between 5 and 10</p>
 {/if}
 ```
 
