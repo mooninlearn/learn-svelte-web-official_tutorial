@@ -1,52 +1,13 @@
-# [Reactivity  Updating arrays and objects](https://svelte.dev/tutorial/reactive-statements)
+# [Props  Declaring props](https://svelte.dev/tutorial/declaring-props)
 
-Svelte's reactivity is triggered by assignments. Methods that mutate arrays or objects will not trigger updates by themselves.
+So far, we've dealt exclusively with internal state — that is to say, the values are only accessible within a given component.
 
-In this example, clicking the "Add a number" button calls the `addNumber` function, which appends a number to the array but doesn't trigger the recalculation of `sum`.
+In any real application, you'll need to pass data from one component down to its children. To do that, we need to declare _properties_, generally shortened to 'props'. In Svelte, we do that with the `export` keyword. Edit the `Nested.svelte` component:
 
-One way to fix that is to assign `numbers` to itself to tell the compiler it has changed:
-
-```js
-function addNumber() {
-  numbers.push(numbers.length + 1);
-  numbers = numbers;
-}
+```svelte
+<script>
+  export let answer;
+</script>
 ```
 
-You could also write this more concisely using the ES6 spread syntax:
-
-```js
-function addNumber() {
-  numbers = [...numbers, numbers.length + 1];
-}
-```
-
-The same rule applies to array methods such as `pop`, `shift`, and `splice` and to object methods such as `Map.set`, `Set.add`, etc.
-
-Assignments to _properties_ of arrays and objects — e.g. `obj.foo += 1` or `array[i] = x` — work the same way as assignments to the values themselves.
-
-```js
-function addNumber() {
-  numbers[numbers.length] = numbers.length + 1;
-}
-```
-
-However, indirect assignments to references such as this...
-
-```js
-const foo = obj.foo;
-foo.bar = 'baz';
-```
-
-or
-
-```js
-function quox(thing) {
-  thing.foo.bar = 'baz';
-}
-quox(obj);
-```
-
-...won't trigger reactivity on `obj.foo.bar`, unless you follow it up with `obj = obj`.
-
-A simple rule of thumb: the updated variable must directly appear on the left hand side of the assignment.
+> Just like `$:`, this may feel a little weird at first. That's not how `export` normally works in JavaScript modules! Just roll with it for now — it'll soon become second nature.
