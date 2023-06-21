@@ -1,21 +1,45 @@
-# [Bindings  Each block bindings](https://svelte.dev/tutorial/each-block-bindings)
+# [Bindings  Media elements](https://svelte.dev/tutorial/media-elements)
 
-You can even bind to properties inside an `each` block.
+The `<audio>` and `<video>` elements have several properties that you can bind to. This example demonstrates a few of them.
+
+On line 62, add `currentTime={time}`, `duration` and `paused` bindings:
 
 ```svelte
-{#each todos as todo}
-  <div class:done={todo.done}>
-  <input
-    type=checkbox
-    bind:checked={todo.done}
-  >
-
-  <input
-    placeholder="What needs to be done?"
-    bind:value={todo.text}
-  >
-  </div>
-{/each}
+<video
+  poster="https://sveltejs.github.io/assets/caminandes-llamigos.jpg"
+  src="https://sveltejs.github.io/assets/caminandes-llamigos.mp4"
+  on:mousemove={handleMove}
+  on:touchmove|preventDefault={handleMove}
+  on:mousedown={handleMousedown}
+  on:mouseup={handleMouseup}
+  bind:currentTime={time}
+  bind:duration
+  bind:paused>
+  <track kind="captions">
+</video>
 ```
 
-> Note that interacting with these `<input>` elements will mutate the array. If you prefer to work with immutable data, you should avoid these bindings and use event handlers instead.
+> `bind:duration` is equivalent to `bind:duration={duration}`
+
+Now, when you click on the video, it will update `time`, `duration` and `paused` as appropriate. This means we can use them to build custom controls.
+
+> Ordinarily on the web, you would track `currentTime` by listening for `timeupdate` events. But these events fire too infrequently, resulting in choppy UI. Svelte does better — it checks `currentTime` using `requestAnimationFrame`.
+
+The complete set of bindings for `<audio>` and `<video>` is as follows — six _readonly_ bindings...
+
+- `duration` (readonly) — the total duration of the video, in seconds
+- `buffered` (readonly) — an array of `{start, end}` objects
+- `seekable` (readonly) — ditto
+- `played` (readonly) — ditto
+- `seeking` (readonly) — boolean
+- `ended` (readonly) — boolean
+
+...and five _two-way_ bindings:
+
+- `currentTime` — the current point in the video, in seconds
+- `playbackRate` — how fast to play the video, where `1` is 'normal'
+- `paused` — this one should be self-explanatory
+- `volume` — a value between 0 and 1
+- `muted` — a boolean value where true is muted
+
+Videos additionally have readonly `videoWidth` and `videoHeight` bindings.
