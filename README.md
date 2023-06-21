@@ -1,27 +1,15 @@
-# [Transitions  Custom JS transitions](https://svelte.dev/tutorial/custom-js-transitions)
+# [Transitions  Transition events](https://svelte.dev/tutorial/transition-events)
 
-While you should generally use CSS for transitions as much as possible, there are some effects that can't be achieved without JavaScript, such as a typewriter effect:
+It can be useful to know when transitions are beginning and ending. Svelte dispatches events that you can listen to like any other DOM event:
 
-```js
-function typewriter(node, { speed = 1 }) {
-	const valid = (
-		node.childNodes.length === 1 &&
-		node.childNodes[0].nodeType === Node.TEXT_NODE
-	);
-
-	if (!valid) {
-		throw new Error(`This transition only works on elements with a single text node child`);
-	}
-
-	const text = node.textContent;
-	const duration = text.length / (speed * 0.01);
-
-	return {
-		duration,
-		tick: t => {
-			const i = Math.trunc(text.length * t);
-			node.textContent = text.slice(0, i);
-		}
-	};
-}
+```svelte
+<p
+	transition:fly="{{ y: 200, duration: 2000 }}"
+	on:introstart="{() => status = 'intro started'}"
+	on:outrostart="{() => status = 'outro started'}"
+	on:introend="{() => status = 'intro ended'}"
+	on:outroend="{() => status = 'outro ended'}"
+>
+	Flies in and out
+</p>
 ```
