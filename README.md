@@ -1,38 +1,27 @@
-# [Motion  Tweened](https://svelte.dev/tutorial/tweened)
+# [Motion  Spring](https://svelte.dev/tutorial/spring)
 
-Setting values and watching the DOM update automatically is cool. Know what's even cooler? _Tweening_ those values. Svelte includes tools to help you build slick user interfaces that use animation to communicate changes.
+The `spring` function is an alternative to `tweened` that often works better for values that are frequently changing.
 
-Let's start by changing the `progress` store to a `tweened` value:
-
-```svelte
-<script>
-  import { tweened } from 'svelte/motion';
-
-  const progress = tweened(0);
-</script>
-```
-
-Clicking the buttons causes the progress bar to animate to its new value. It's a bit robotic and unsatisfying though. We need to add an easing function:
+In this example we have two stores — one representing the circle's coordinates, and one representing its size. Let's convert them to springs:
 
 ```svelte
 <script>
-  import { tweened } from 'svelte/motion';
-  import { cubicOut } from 'svelte/easing';
+  import { spring } from 'svelte/motion';
 
-  const progress = tweened(0, {
-    duration: 400,
-    easing: cubicOut
-  });
+  let coords = spring({ x: 50, y: 50 });
+  let size = spring(10);
 </script>
 ```
 
-> The `svelte/easing` module contains the [Penner easing equations](https://web.archive.org/web/20190805215728/http://robertpenner.com/easing/), or you can supply your own `p => t` function where `p` and `t` are both values between 0 and 1.
+Both springs have default `stiffness` and `damping` values, which control the spring's, well... springiness. We can specify our own initial values:
 
-The full set of options available to `tweened`:
+```js
+let coords = spring({ x: 50, y: 50 }, {
+  stiffness: 0.1,
+  damping: 0.25
+});
+```
 
-- `delay` — milliseconds before the tween starts
-- `duration` — either the duration of the tween in milliseconds, or a `(from, to) => milliseconds` function allowing you to (e.g.) specify longer tweens for larger changes in value
-- `easing` — a `p => t` function
-- `interpolate` — a custom `(from, to) => t => value` function for interpolating between arbitrary values. By default, Svelte will interpolate between numbers, dates, and identically-shaped arrays and objects (as long as they only contain numbers and dates or other valid arrays and objects). If you want to interpolate (for example) colour strings or transformation matrices, supply a custom interpolator
+Waggle your mouse around, and try dragging the sliders to get a feel for how they affect the spring's behaviour. Notice that you can adjust the values while the spring is still in motion.
 
-You can also pass these options to `progress.set` and `progress.update` as a second argument, in which case they will override the defaults. The `set` and `update` methods both return a promise that resolves when the tween completes.
+Consult the [API reference](https://svelte.dev/docs#run-time-svelte-motion-spring) for more information.
