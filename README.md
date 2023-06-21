@@ -1,20 +1,17 @@
-# [Transitions  Adding parameters](https://svelte.dev/tutorial/adding-parameters-to-transitions)
+# [Transitions  In and out](https://svelte.dev/tutorial/in-and-out)
 
-Transition functions can accept parameters. Replace the `fade` transition with `fly`...
+Instead of the `transition` directive, an element can have an `in` or an `out` directive, or both together. Import `fade` alongside `fly`...
 
-```svelte
-<script>
-import { fly } from 'svelte/transition';
-let visible = true;
-</script>
+```js
+import { fade, fly } from 'svelte/transition';
 ```
 
-...and apply it to the `<p>` along with some options:
+...then replace the `transition` directive with separate `in` and `out` directives:
 
 ```svelte
-<p transition:fly="{{ y: 200, duration: 2000 }}">
-Flies in and out
+<p in:fly="{{ y: 200, duration: 2000 }}" out:fade>
+Flies in, fades out
 </p>
 ```
 
-Note that the transition is _reversible_ — if you toggle the checkbox while the transition is ongoing, it transitions from the current point, rather than the beginning or the end.
+In this case, the transitions are _not_ reversed.
