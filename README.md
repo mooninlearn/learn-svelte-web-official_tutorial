@@ -1,43 +1,31 @@
-# [Lifecycle  onDestroy](https://svelte.dev/tutorial/ondestroy)
+# [Lifecycle  beforeUpdate and afterUpdate](https://svelte.dev/tutorial/update)
 
-To run code when your component is destroyed, use `onDestroy`.
+The `beforeUpdate` function schedules work to happen immediately before the DOM is updated. `afterUpdate` is its counterpart, used for running code once the DOM is in sync with your data.
 
-For example, we can add a `setInterval` function when our component initialises, and clean it up when it's no longer relevant. Doing so prevents memory leaks.
+Together, they're useful for doing things imperatively that are difficult to achieve in a purely state-driven way, like updating the scroll position of an element.
 
-```svelte
-<script>
-import { onDestroy } from 'svelte';
+This [Eliza](https://en.wikipedia.org/wiki/ELIZA) chatbot is annoying to use, because you have to keep scrolling the chat window. Let's fix that.
 
-let counter = 0;
-const interval = setInterval(() => counter += 1, 1000);
-
-onDestroy(() => clearInterval(interval));
-</script>
 ```
+let div;
+let autoscroll;
 
-While it's important to call lifecycle functions during the component's initialisation, it doesn't matter _where_ you call them from. So if we wanted, we could abstract the interval logic into a helper function in `utils.js`...
-
-```svelte
-import { onDestroy } from 'svelte';
-
-export function onInterval(callback, milliseconds) {
-const interval = setInterval(callback, milliseconds);
-
-onDestroy(() => {
-clearInterval(interval);
+beforeUpdate(() => {
+autoscroll = div && (div.offsetHeight + div.scrollTop) > (div.scrollHeight - 20);
 });
-}
+
+afterUpdate(() => {
+if (autoscroll) div.scrollTo(0, div.scrollHeight);
+});
 ```
 
-...and import it into our component:
+Note that `beforeUpdate` will first run before the component has mounted, so we need to check for the existence of `div` before reading its properties.
 
-```svelte
-<script>
-import { onInterval } from './utils.js';
 
-let counter = 0;
-onInterval(() => counter += 1, 1000);
-</script>
+## NOTE
+
+> Install
+
+```bash
+npm i elizabot
 ```
-
-Open and close the timer a few times and make sure the counter keeps ticking and the CPU load increases. This is due to a memory leak as the previous timers are not deleted. Don't forget to refresh the page before solving the example.
