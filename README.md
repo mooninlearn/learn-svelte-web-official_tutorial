@@ -1,34 +1,24 @@
-# [Bindings  Group inputs](https://svelte.dev/tutorial/group-inputs)
+# [Bindings  Textarea inputs](https://svelte.dev/tutorial/textarea-inputs)
 
-If you have multiple inputs relating to the same value, you can use `bind:group` along with the `value` attribute. Radio inputs in the same group are mutually exclusive; checkbox inputs in the same group form an array of selected values.
-
-Add `bind:group` to each input:
+The <textarea> element behaves similarly to a text input in Svelte — use bind:value to create a two-way binding between the <textarea> content and the value variable:
 
 ```svelte
-<input type=radio bind:group={scoops} name="scoops" value={1}>
+<textarea bind:value={value}></textarea>
 ```
 
-In this case, we could make the code simpler by moving the checkbox inputs into an `each` block. First, add a `menu` variable to the `<script>` block...
-
-```js
-let menu = [
-'Cookies and cream',
-'Mint choc chip',
-'Raspberry ripple'
-];
-```
-
-...then replace the second section:
+In cases like these, where the names match, we can also use a shorthand form:
 
 ```svelte
-<h2>Flavours</h2>
-
-{#each menu as flavour}
-  <label>
-  <input type=checkbox bind:group={flavours} name="flavours" value={flavour}>
-    {flavour}
-  </label>
-{/each}
+<textarea bind:value></textarea>
 ```
 
-It's now easy to expand our ice cream menu in new and exciting directions.
+This applies to all bindings, not just textareas.
+
+## NOTE
+
+> Install `marked`
+
+```bash
+npm install marked
+npm install @types/marked # For TypeScript projects
+```

@@ -20,5 +20,8 @@
   },
   "description": "Svelte Offical Tutorial(https://svelte.dev/tutorial/)",
   "main": "dist/index.js",
-  "author": "Moon In Learn <mooninlearn@gmail.com>"
+  "author": "Moon In Learn <mooninlearn@gmail.com>",
+  "dependencies": {
+    "marked": "^5.1.0"
+  }
 }
