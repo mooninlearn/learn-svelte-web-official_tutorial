@@ -1,18 +1,20 @@
-# [Transitions  The transition directive](https://svelte.dev/tutorial/transition)
+# [Transitions  Adding parameters](https://svelte.dev/tutorial/adding-parameters-to-transitions)
 
-We can make more appealing user interfaces by gracefully transitioning elements into and out of the DOM. Svelte makes this very easy with the `transition` directive.
-
-First, import the `fade` function from `svelte/transition`...
+Transition functions can accept parameters. Replace the `fade` transition with `fly`...
 
 ```svelte
 <script>
-import { fade } from 'svelte/transition';
+import { fly } from 'svelte/transition';
 let visible = true;
 </script>
 ```
 
-...then add it to the `<p>` element:
+...and apply it to the `<p>` along with some options:
 
 ```svelte
-<p transition:fade>Fades in and out</p>
+<p transition:fly="{{ y: 200, duration: 2000 }}">
+Flies in and out
+</p>
 ```
+
+Note that the transition is _reversible_ — if you toggle the checkbox while the transition is ongoing, it transitions from the current point, rather than the beginning or the end.
