@@ -1,31 +1,19 @@
-# [Lifecycle  beforeUpdate and afterUpdate](https://svelte.dev/tutorial/update)
+# [Lifecycle  tick](https://svelte.dev/tutorial/tick)
 
-The `beforeUpdate` function schedules work to happen immediately before the DOM is updated. `afterUpdate` is its counterpart, used for running code once the DOM is in sync with your data.
+The `tick` function is unlike other lifecycle functions in that you can call it any time, not just when the component first initialises. It returns a promise that resolves as soon as any pending state changes have been applied to the DOM (or immediately, if there are no pending state changes).
 
-Together, they're useful for doing things imperatively that are difficult to achieve in a purely state-driven way, like updating the scroll position of an element.
+When you update component state in Svelte, it doesn't update the DOM immediately. Instead, it waits until the next _microtask_ to see if there are any other changes that need to be applied, including in other components. Doing so avoids unnecessary work and allows the browser to batch things more effectively.
 
-This [Eliza](https://en.wikipedia.org/wiki/ELIZA) chatbot is annoying to use, because you have to keep scrolling the chat window. Let's fix that.
+You can see that behaviour in this example. Select a range of text and hit the tab key. Because the `<textarea>` value changes, the current selection is cleared and the cursor jumps, annoyingly, to the end. We can fix this by importing `tick`...
 
-```
-let div;
-let autoscroll;
-
-beforeUpdate(() => {
-autoscroll = div && (div.offsetHeight + div.scrollTop) > (div.scrollHeight - 20);
-});
-
-afterUpdate(() => {
-if (autoscroll) div.scrollTo(0, div.scrollHeight);
-});
+```js
+import { tick } from 'svelte';
 ```
 
-Note that `beforeUpdate` will first run before the component has mounted, so we need to check for the existence of `div` before reading its properties.
+...and running it immediately before we set `this.selectionStart` and `this.selectionEnd` at the end of `handleKeydown`:
 
-
-## NOTE
-
-> Install
-
-```bash
-npm i elizabot
+```js
+await tick();
+this.selectionStart = selectionStart;
+this.selectionEnd = selectionEnd;
 ```
