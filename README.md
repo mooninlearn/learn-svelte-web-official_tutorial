@@ -1,17 +1,26 @@
-# [Advanced styling  The style directive](https://svelte.dev/tutorial/style-directive)
+# [Component composition  Slots](https://svelte.dev/tutorial/slots)
 
-Being able to set CSS properties dynamically is nice. However, this can get unwieldy if you have to write a long string. Mistakes like missing any of the semicolons could make the whole string invalid. Therefore, Svelte provides a nicer way to write inline styles with the style directive.
+Just like elements can have children...
 
-Change the style attribute of the paragraph to the following:
-
-```svelte
-<p 
-  style:color 
-  style:--opacity="{bgOpacity}"
->
+```
+<div>
+<p>I'm a child of the div</p>
+</div>
 ```
 
-The style directive shares a few qualities with the class directive. You can use a shorthand when the name of the property and the variable are the same. So `style:color="{color}"` can be written as just `style:color`.
+...so can components. Before a component can accept children, though, it needs to know where to put them. We do this with the `<slot>` element. Put this inside `Box.svelte`:
 
-Similar to the class directive, the style directive will take precedence if you try to set the same property through a style attribute.
+```
+<div class="box">
+<slot></slot>
+</div>
+```
 
+You can now put things in the box:
+
+```
+<Box>
+<h2>Hello!</h2>
+<p>This is a box. It can contain anything.</p>
+</Box>
+```
