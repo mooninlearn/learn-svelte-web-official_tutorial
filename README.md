@@ -1,26 +1,45 @@
-# [Component composition  Checking for slot content](https://svelte.dev/tutorial/optional-slots)
+# [Component composition  Slot props](https://svelte.dev/tutorial/slot-props)
 
-In some cases, you may want to control parts of your component based on whether the parent passes in content for a certain slot. Perhaps you have a wrapper around that slot, and you don't want to render it if the slot is empty. Or perhaps you'd like to apply a class only if the slot is present. You can do this by checking the properties of the special `$$slots` variable.
+In this app, we have a `<Hoverable>` component that tracks whether the mouse is currently over it. It needs to pass that data _back_ to the parent component, so that we can update the slotted contents.
 
-`$$slots` is an object whose keys are the names of the slots passed in by the parent component. If the parent leaves a slot empty, then `$$slots` will not have an entry for that slot.
-
-Notice that both instances of `<Project>` in this example render a container for comments and a notification dot, even though only one has comments. We want to use `$$slots` to make sure we only render these elements when the parent `<App>` passes in content for the `comments` slot.
-
-In `Project.svelte`, update the `class:has-discussion` directive on the `<article>`:
+For this, we use _slot props_. In `Hoverable.svelte`, pass the `hovering` value into the slot:
 
 ```svelte
-<article class:has-discussion={$$slots.comments}>
+<div on:mouseenter={enter} on:mouseleave={leave}>
+  <slot hovering={hovering}></slot>
+</div>
 ```
 
-Next, wrap the `comments` slot and its wrapping `<div>` in an `if` block that checks `$$slots`:
+> Remember you can also use the `{hovering}` shorthand, if you prefer.
+
+Then, to expose `hovering` to the contents of the `<Hoverable>` component, we use the `let` directive:
 
 ```svelte
-{#if $$slots.comments}
-  <div class="discussion">
-    <h3>Comments</h3>
-    <slot name="comments"></slot>
+<Hoverable let:hovering={hovering}>
+  <div class:active={hovering}>
+    {#if hovering}
+      <p>I am being hovered upon.</p>
+    {:else}
+      <p>Hover over me!</p>
+    {/if}
   </div>
-{/if}
+</Hoverable>
 ```
 
-Now the comments container and the notification dot won't render when `<App>` leaves the `comments` slot empty.
+You can rename the variable, if you want — let's call it `active` in the parent component:
+
+```svelte
+<Hoverable let:hovering={active}>
+  <div class:active>
+    {#if active}
+      <p>I am being hovered upon.</p>
+    {:else}
+      <p>Hover over me!</p>
+    {/if}
+  </div>
+</Hoverable>
+```
+
+You can have as many of these components as you like, and the slotted props will remain local to the component where they're declared.
+
+> Named slots can also have props; use the `let` directive on an element with a `slot="..."` attribute, instead of on the component itself.
