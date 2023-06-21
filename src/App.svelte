@@ -1,14 +1,9 @@
 <script>
-	import Keypad from './Keypad.svelte';
+	import InputField from './InputField.svelte';
 
-	let pin;
-	$: view = pin ? pin.replace(/\d(?!$)/g, '•') : 'enter your pin';
-
-	function handleSubmit() {
-		alert(`submitted ${pin}`);
-	}
+	let field;
 </script>
 
-<h1 style="color: {pin ? '#333' : '#ccc'}">{view}</h1>
+<InputField bind:this={field}/>
 
-<Keypad bind:value={pin} on:submit={handleSubmit}/>
+<button on:click={() => field.focus()}>Focus field</button>
