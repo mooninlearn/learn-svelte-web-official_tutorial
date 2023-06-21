@@ -1,19 +1,16 @@
-# [Bindings  Select multiple](https://svelte.dev/tutorial/multiple-select-bindings)
+# [Bindings  Contenteditable bindings](https://svelte.dev/tutorial/contenteditable-bindings)
 
-A select can have a multiple attribute, in which case it will populate an array rather than selecting a single value.
+Elements with the `contenteditable` attribute support the following bindings:
 
-Returning to our earlier ice cream example, we can replace the checkboxes with a <select multiple>:
+- [`innerHTML`](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML)
+- [`innerText`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText)
+- [`textContent`](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)
+
+There are slight differences between each of these, read more about them [here](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent#Differences_from_innerText).
 
 ```svelte
-<h2>Flavours</h2>
-
-<select multiple bind:value={flavours}>
-	{#each menu as flavour}
-		<option value={flavour}>
-			{flavour}
-		</option>
-	{/each}
-</select>
+<div
+contenteditable="true"
+bind:innerHTML={html}
+></div>
 ```
-
-Press and hold the control key (or the command key on MacOS) for selecting multiple options.
