@@ -1,15 +1,13 @@
-# [Transitions  Transition events](https://svelte.dev/tutorial/transition-events)
+# [Transitions  Local transitions](https://svelte.dev/tutorial/local-transitions)
 
-It can be useful to know when transitions are beginning and ending. Svelte dispatches events that you can listen to like any other DOM event:
+Ordinarily, transitions will play on elements when any container block is added or destroyed. In the example here, toggling the visibility of the entire list also applies transitions to individual list elements.
+
+Instead, we'd like transitions to play only when individual items are added and removed — in other words, when the user drags the slider.
+
+We can achieve this with a local transition, which only plays when the block with the transition itself is added or removed:
 
 ```svelte
-<p
-	transition:fly="{{ y: 200, duration: 2000 }}"
-	on:introstart="{() => status = 'intro started'}"
-	on:outrostart="{() => status = 'outro started'}"
-	on:introend="{() => status = 'intro ended'}"
-	on:outroend="{() => status = 'outro ended'}"
->
-	Flies in and out
-</p>
+<div transition:slide|local>
+	{item}
+</div>
 ```
