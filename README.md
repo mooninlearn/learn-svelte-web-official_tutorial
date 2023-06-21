@@ -1,24 +1,11 @@
-# [Bindings  Textarea inputs](https://svelte.dev/tutorial/textarea-inputs)
+# [Bindings  Select bindings](https://svelte.dev/tutorial/select-bindings)
 
-The <textarea> element behaves similarly to a text input in Svelte — use bind:value to create a two-way binding between the <textarea> content and the value variable:
-
-```svelte
-<textarea bind:value={value}></textarea>
-```
-
-In cases like these, where the names match, we can also use a shorthand form:
+We can also use bind:value with <select> elements. Update line 20:
 
 ```svelte
-<textarea bind:value></textarea>
+<select bind:value={selected} on:change="{() => answer = ''}">
 ```
 
-This applies to all bindings, not just textareas.
+Note that the <option> values are objects rather than strings. Svelte doesn't mind.
 
-## NOTE
-
-> Install `marked`
-
-```bash
-npm install marked
-npm install @types/marked # For TypeScript projects
-```
+Because we haven't set an initial value of selected, the binding will set it to the default value (the first in the list) automatically. Be careful though — until the binding is initialised, selected remains undefined, so we can't blindly reference e.g. selected.id in the template. If your use case allows it, you could also set an initial value to bypass this problem.
