@@ -1,26 +1,32 @@
-# [Introduction  Nested components](https://svelte.dev/tutorial/nested-components)
+# [Introduction  Making an app](https://svelte.dev/tutorial/making-an-app)
 
-It would be impractical to put your entire app in a single component. Instead, we can import components from other files and then use them as though we were including elements.
+This tutorial is designed to get you familiar with the process of writing components. But at some point, you'll want to start writing components in the comfort of your own text editor.
 
-We now present you 2 files in the editor on the right (upper bar) to click on, `App.svelte` and `Nested.svelte`.
+First, you'll need to integrate Svelte with a build tool. We recommend using [SvelteKit](https://kit.svelte.dev/), which sets up [Vite](https://vitejs.dev/) with [vite-plugin-svelte](https://github.com/sveltejs/vite-plugin-svelte/) for you...
 
-Each `.svelte` file holds a component that is a reusable self-contained block of code that encapsulates HTML, CSS, and JavaScript that belong together.
-
-Let's add a `<script>` tag to `App.svelte` that imports the file (our component) `Nested.svelte` into our app...
-
-```svelte
-<script>
-  import Nested from './Nested.svelte';
-</script>
+```bash
+npm create svelte@latest myapp
 ```
 
-...then use component `Nested` in the app markup:
+There are also a number of [community-maintained integrations](https://sveltesociety.dev/tools).
 
-```svelte
-<p>This is a paragraph.</p>
-<Nested/>
+Don't worry if you're relatively new to web development and haven't used these tools before. We've prepared a simple step-by-step guide, [Svelte for new developers](https://svelte.dev/blog/svelte-for-new-developers), which walks you through the process.
+
+You'll also want to configure your text editor. There are [plugins](https://sveltesociety.dev/tools#editor-support) for many popular editors as well as an official [VS Code extension](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+
+Then, once you've got your project set up, using Svelte components is easy. The compiler turns each component into a regular JavaScript class — just import it and instantiate with `new`:
+
+```js
+import App from './App.svelte';
+
+const app = new App({
+  target: document.body,
+  props: {
+    // we'll learn about props later
+    answer: 42
+  }
+});
 ```
 
-Notice that even though `Nested.svelte` has a `<p>` element, the styles from `App.svelte` don't leak in.
+You can then interact with `app` using the [component API](https://svelte.dev/docs#run-time-client-side-component-api) if you need to.
 
-Also notice that the component name `Nested` is capitalised. This convention has been adopted to allow us to differentiate between user-defined components and regular HTML tags.
