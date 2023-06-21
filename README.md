@@ -1,27 +1,18 @@
-# [Motion  Spring](https://svelte.dev/tutorial/spring)
+# [Transitions  The transition directive](https://svelte.dev/tutorial/transition)
 
-The `spring` function is an alternative to `tweened` that often works better for values that are frequently changing.
+We can make more appealing user interfaces by gracefully transitioning elements into and out of the DOM. Svelte makes this very easy with the `transition` directive.
 
-In this example we have two stores — one representing the circle's coordinates, and one representing its size. Let's convert them to springs:
+First, import the `fade` function from `svelte/transition`...
 
 ```svelte
 <script>
-  import { spring } from 'svelte/motion';
-
-  let coords = spring({ x: 50, y: 50 });
-  let size = spring(10);
+import { fade } from 'svelte/transition';
+let visible = true;
 </script>
 ```
 
-Both springs have default `stiffness` and `damping` values, which control the spring's, well... springiness. We can specify our own initial values:
+...then add it to the `<p>` element:
 
-```js
-let coords = spring({ x: 50, y: 50 }, {
-  stiffness: 0.1,
-  damping: 0.25
-});
+```svelte
+<p transition:fade>Fades in and out</p>
 ```
-
-Waggle your mouse around, and try dragging the sliders to get a feel for how they affect the spring's behaviour. Notice that you can adjust the values while the spring is still in motion.
-
-Consult the [API reference](https://svelte.dev/docs#run-time-svelte-motion-spring) for more information.
