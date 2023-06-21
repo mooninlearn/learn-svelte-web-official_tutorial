@@ -1,13 +1,35 @@
-# [Transitions  Key blocks](https://svelte.dev/tutorial/key-blocks)
+# [Animations  The animate directive](https://svelte.dev/tutorial/animate)
 
-Key blocks destroy and recreate their contents when the value of an expression changes.
+In the [previous chapter](https://svelte.dev/tutorial/deferred-transitions), we used deferred transitions to create the illusion of motion as elements move from one todo list to the other.
 
-```svelte
-{#key value}
-	<div transition:fade>{value}</div>
-{/key}
+To complete the illusion, we also need to apply motion to the elements that _aren't_ transitioning. For this, we use the `animate` directive.
+
+First, import the `flip` function — flip stands for ['First, Last, Invert, Play'](https://aerotwist.com/blog/flip-your-animations/) — from `svelte/animate`:
+
+```js
+import { flip } from 'svelte/animate';
 ```
 
-This is useful if you want an element to play its transition whenever a value changes instead of only when the element enters or leaves the DOM.
+Then add it to the `<label>` elements:
 
-Wrap the <span> element in a key block depending on number. This will make the animation play whenever you press the increment button.
+```svelte
+<label
+  in:receive="{{key: todo.id}}"
+  out:send="{{key: todo.id}}"
+  animate:flip
+>
+```
+
+The movement is a little slow in this case, so we can add a `duration` parameter:
+
+```svelte
+<label
+  in:receive="{{key: todo.id}}"
+  out:send="{{key: todo.id}}"
+  animate:flip="{{duration: 200}}"
+>
+```
+
+> `duration` can also be a `d => milliseconds` function, where `d` is the number of pixels the element has to travel
+
+Note that all the transitions and animations are being applied with CSS, rather than JavaScript, meaning they won't block (or be blocked by) the main thread.
