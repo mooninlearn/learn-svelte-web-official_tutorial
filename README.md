@@ -1,13 +1,16 @@
-# [Props  Declaring props](https://svelte.dev/tutorial/declaring-props)
+# [Props  Default values](https://svelte.dev/tutorial/default-values)
 
-So far, we've dealt exclusively with internal state — that is to say, the values are only accessible within a given component.
-
-In any real application, you'll need to pass data from one component down to its children. To do that, we need to declare _properties_, generally shortened to 'props'. In Svelte, we do that with the `export` keyword. Edit the `Nested.svelte` component:
+We can easily specify default values for props in Nested.svelte:
 
 ```svelte
 <script>
-  export let answer;
+	export let answer = 'a mystery';
 </script>
 ```
 
-> Just like `$:`, this may feel a little weird at first. That's not how `export` normally works in JavaScript modules! Just roll with it for now — it'll soon become second nature.
+If we now add a second component without an answer prop, it will fall back to the default:
+
+```svelte
+<Nested answer={42}/>
+<Nested/>
+```
