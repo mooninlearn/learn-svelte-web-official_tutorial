@@ -1,12 +1,18 @@
-# [Stores  Derived stores ](https://svelte.dev/tutorial/derived-stores)
+# [Stores  Custom stores](https://svelte.dev/tutorial/custom-stores)
 
-You can create a store whose value is based on the value of one or more _other_ stores with `derived`. Building on our previous example, we can create a store that derives the time the page has been open:
+As long as an object correctly implements the `subscribe` method, it's a store. Beyond that, anything goes. It's very easy, therefore, to create custom stores with domain-specific logic.
+
+For example, the `count` store from our earlier example could include `increment`, `decrement` and `reset` methods and avoid exposing `set` and `update`:
 
 ```js
-export const elapsed = derived(
-  time,
-  $time => Math.round(($time - start) / 1000)
-);
-```
+function createCount() {
+  const { subscribe, set, update } = writable(0);
 
-> It's possible to derive a store from multiple inputs, and to explicitly `set` a value instead of returning it (which is useful for deriving values asynchronously). Consult the [API reference](https://svelte.dev/docs#run-time-svelte-store-derived) for more information.
+  return {
+    subscribe,
+    increment: () => update(n => n + 1),
+    decrement: () => update(n => n - 1),
+    reset: () => set(0)
+  };
+}
+```
