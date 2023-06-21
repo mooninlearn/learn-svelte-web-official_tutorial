@@ -1,19 +1,35 @@
-# [Logic  Keyed each blocks](https://svelte.dev/tutorial/keyed-each-blocks)
+# [Logic  Await blocks](https://svelte.dev/tutorial/await-blocks)
 
-By default, when you modify the value of an `each` block, it will add and remove items at the _end_ of the block, and update any values that have changed. That might not be what you want.
-
-It's easier to show why than to explain. Click to expand the `Console`, then click the 'Remove first thing' button a few times, and notice what happens: it does not remove the first `<Thing>` component, but rather the _last_ DOM node. Then it updates the `name` value in the remaining DOM nodes, but not the emoji.
-
-Instead, we'd like to remove only the first `<Thing>` component and its DOM node, and leave the others unaffected.
-
-To do that, we specify a unique identifier (or "key") for the `each` block:
+Most web applications have to deal with asynchronous data at some point. Svelte makes it easy to _await_ the value of [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) directly in your markup:
 
 ```svelte
-{#each things as thing (thing.id)}
-  <Thing name={thing.name}/>
-{/each}
+{#await promise}
+  <p>...waiting</p>
+{:then number}
+  <p>The number is {number}</p>
+{:catch error}
+  <p style="color: red">{error.message}</p>
+{/await}
 ```
 
-Here, `(thing.id)` is the _key_, which tells Svelte how to figure out which DOM node to change when the component updates.
+> Only the most recent `promise` is considered, meaning you don't need to worry about race conditions.
 
-> You can use any object as the key, as Svelte uses a `Map` internally — in other words you could do `(thing)` instead of `(thing.id)`. Using a string or number is generally safer, however, since it means identity persists without referential equality, for example when updating with fresh data from an API server.
+If you know that your promise can't reject, you can omit the `catch` block. You can also omit the first block if you don't want to show anything until the promise resolves:
+
+```svelte
+{#await promise then number}
+  <p>the number is {number}</p>
+{/await}
+```
+
+## NOTE:
+
+> App.svelte 변경
+
+```js
+// BEFORE
+const res = await fetch(`/tutorial/random-number`);
+
+// AFTER
+const res = await fetch(`https://svelte.dev/tutorial/random-number`);
+```
