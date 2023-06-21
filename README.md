@@ -1,35 +1,46 @@
-# [Animations  The animate directive](https://svelte.dev/tutorial/animate)
+# [Actions  The use directive](https://svelte.dev/tutorial/actions)
 
-In the [previous chapter](https://svelte.dev/tutorial/deferred-transitions), we used deferred transitions to create the illusion of motion as elements move from one todo list to the other.
+Actions are essentially element-level lifecycle functions. They're useful for things like:
 
-To complete the illusion, we also need to apply motion to the elements that _aren't_ transitioning. For this, we use the `animate` directive.
+- interfacing with third-party libraries
+- lazy-loaded images
+- tooltips
+- adding custom event handlers
 
-First, import the `flip` function — flip stands for ['First, Last, Invert, Play'](https://aerotwist.com/blog/flip-your-animations/) — from `svelte/animate`:
+In this app, we want to make the orange modal close when the user clicks outside it. It has an event handler for the `outclick` event, but it isn't a native DOM event. We have to dispatch it ourselves. First, import the `clickOutside` function...
 
 ```js
-import { flip } from 'svelte/animate';
+import { clickOutside } from "./click_outside.js";
 ```
 
-Then add it to the `<label>` elements:
+...then use it with the element:
 
 ```svelte
-<label
-  in:receive="{{key: todo.id}}"
-  out:send="{{key: todo.id}}"
-  animate:flip
->
+<div class="box" use:clickOutside on:outclick="{() => (showModal = false)}">
+  Click outside me!
+</div>
 ```
 
-The movement is a little slow in this case, so we can add a `duration` parameter:
+Open the `click_outside.js` file. Like transition functions, an action function receives a `node` (which is the element that the action is applied to) and some optional parameters, and returns an action object. That object can have a `destroy` function, which is called when the element is unmounted.
 
-```svelte
-<label
-  in:receive="{{key: todo.id}}"
-  out:send="{{key: todo.id}}"
-  animate:flip="{{duration: 200}}"
->
+We want to fire the `outclick` event when the user clicks outside the orange box. One possible implementation looks like this:
+
+```js
+export function clickOutside(node) {
+  const handleClick = (event) => {
+    if (!node.contains(event.target)) {
+      node.dispatchEvent(new CustomEvent("outclick"));
+    }
+  };
+
+  document.addEventListener("click", handleClick, true);
+
+  return {
+    destroy() {
+      document.removeEventListener("click", handleClick, true);
+    },
+  };
+}
 ```
 
-> `duration` can also be a `d => milliseconds` function, where `d` is the number of pixels the element has to travel
-
-Note that all the transitions and animations are being applied with CSS, rather than JavaScript, meaning they won't block (or be blocked by) the main thread.
+Update the `clickOutside` function, click the button to show the modal and then click outside it to close it.
