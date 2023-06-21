@@ -1,27 +1,21 @@
-# [Introduction  Basics](https://svelte.dev/tutorial/basics)
+# [Introduction  Adding data](https://svelte.dev/tutorial/adding-data)
 
-Welcome to the Svelte tutorial. This will teach you everything you need to know to build fast, small web applications easily.
+A component that just renders some static markup isn't very interesting. Let's add some data.
 
-You can also consult the [API docs](https://svelte.dev/docs) and the [examples](https://svelte.dev/examples), or — if you're impatient to start hacking on your machine locally — the [60-second quickstart](https://svelte.dev/docs#getting-started).
+First, add a script tag to your component and declare a `name` variable:
 
-## What is Svelte?
+```svelte
+<script>
+let name = 'world';
+</script>
 
-Svelte is a tool for building fast web applications.
+<h1>Hello world!</h1>
+```
 
-It is similar to JavaScript frameworks such as React and Vue, which share a goal of making it easy to build slick interactive user interfaces.
+Then, we can refer to `name` in the markup:
 
-But there's a crucial difference: Svelte converts your app into ideal JavaScript at _build time_, rather than interpreting your application code at _run time_. This means you don't pay the performance cost of the framework's abstractions, and you don't incur a penalty when your app first loads.
+```svelte
+<h1>Hello {name}!</h1>
+```
 
-You can build your entire app with Svelte, or you can add it incrementally to an existing codebase. You can also ship components as standalone packages that work anywhere, without the overhead of a dependency on a conventional framework.
-
-## How to use this tutorial
-
-You'll need to have basic familiarity with HTML, CSS and JavaScript to understand Svelte.
-
-As you progress through the tutorial, you'll be presented with mini exercises designed to illustrate new features. Later chapters build on the knowledge gained in earlier ones, so it's recommended that you go from start to finish. If necessary, you can navigate via the dropdown above (click 'Introduction / Basics').
-
-Each tutorial chapter will have a 'Show me' button that you can click if you get stuck following the instructions. Try not to rely on it too much; you will learn faster by figuring out where to put each suggested code block and manually typing it into the editor.
-
-## Understanding components
-
-In Svelte, an application is composed from one or more _components_. A component is a reusable self-contained block of code that encapsulates HTML, CSS and JavaScript that belong together, written into a `.svelte` file. The 'hello world' example in the code editor is a simple component.
+Inside the curly braces, we can put any JavaScript we want. Try changing `name` to `name.toUpperCase()` for a shoutier greeting.
