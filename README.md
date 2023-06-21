@@ -1,35 +1,9 @@
-# [Logic  Await blocks](https://svelte.dev/tutorial/await-blocks)
+# [Events  DOM events](https://svelte.dev/tutorial/dom-events)
 
-Most web applications have to deal with asynchronous data at some point. Svelte makes it easy to _await_ the value of [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) directly in your markup:
-
-```svelte
-{#await promise}
-  <p>...waiting</p>
-{:then number}
-  <p>The number is {number}</p>
-{:catch error}
-  <p style="color: red">{error.message}</p>
-{/await}
-```
-
-> Only the most recent `promise` is considered, meaning you don't need to worry about race conditions.
-
-If you know that your promise can't reject, you can omit the `catch` block. You can also omit the first block if you don't want to show anything until the promise resolves:
+As we've briefly seen already, you can listen to any event on an element with the on: directive:
 
 ```svelte
-{#await promise then number}
-  <p>the number is {number}</p>
-{/await}
-```
-
-## NOTE:
-
-> App.svelte 변경
-
-```js
-// BEFORE
-const res = await fetch(`/tutorial/random-number`);
-
-// AFTER
-const res = await fetch(`https://svelte.dev/tutorial/random-number`);
+<div on:mousemove={handleMousemove}>
+	The mouse position is {m.x} x {m.y}
+</div>
 ```
