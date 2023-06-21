@@ -1,7 +1,17 @@
-# [Advanced styling  Inline styles](https://svelte.dev/tutorial/inline-styles)
+# [Advanced styling  The style directive](https://svelte.dev/tutorial/style-directive)
 
-Apart from adding styles inside style tags, you can also add styles to individual elements using the style attribute. Usually you will want to do styling through CSS, but this can come in handy for dynamic styles, especially when combined with CSS custom properties.
+Being able to set CSS properties dynamically is nice. However, this can get unwieldy if you have to write a long string. Mistakes like missing any of the semicolons could make the whole string invalid. Therefore, Svelte provides a nicer way to write inline styles with the style directive.
 
-Add the following style attribute to the paragraph element: `style="color: {color}; --opacity: {bgOpacity};"`
+Change the style attribute of the paragraph to the following:
 
-Great, now you can style the paragraph using variables that change based on your input without having to make a class for every possible value.
+```svelte
+<p 
+  style:color 
+  style:--opacity="{bgOpacity}"
+>
+```
+
+The style directive shares a few qualities with the class directive. You can use a shorthand when the name of the property and the variable are the same. So `style:color="{color}"` can be written as just `style:color`.
+
+Similar to the class directive, the style directive will take precedence if you try to set the same property through a style attribute.
+
