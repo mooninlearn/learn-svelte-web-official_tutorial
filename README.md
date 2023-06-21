@@ -1,28 +1,13 @@
-# [Transitions  Deferred transitions](https://svelte.dev/tutorial/deferred-transitions)
+# [Transitions  Key blocks](https://svelte.dev/tutorial/key-blocks)
 
-A particularly powerful feature of Svelte's transition engine is the ability to defer transitions, so that they can be coordinated between multiple elements.
-
-Take this pair of todo lists, in which toggling a todo sends it to the opposite list. In the real world, objects don't behave like that — instead of disappearing and reappearing in another place, they move through a series of intermediate positions. Using motion can go a long way towards helping users understand what's happening in your app.
-
-We can achieve this effect using the crossfade function, which creates a pair of transitions called send and receive. When an element is 'sent', it looks for a corresponding element being 'received', and generates a transition that transforms the element to its counterpart's position and fades it out. When an element is 'received', the reverse happens. If there is no counterpart, the fallback transition is used.
-
-Find the <label> element on line 65, and add the send and receive transitions:
+Key blocks destroy and recreate their contents when the value of an expression changes.
 
 ```svelte
-<label
-	in:receive="{{key: todo.id}}"
-	out:send="{{key: todo.id}}"
->
+{#key value}
+	<div transition:fade>{value}</div>
+{/key}
 ```
 
-Do the same for the next <label> element:
+This is useful if you want an element to play its transition whenever a value changes instead of only when the element enters or leaves the DOM.
 
-```svelte
-<label
-	class="done"
-	in:receive="{{key: todo.id}}"
-	out:send="{{key: todo.id}}"
->
-```
-
-Now, when you toggle items, they move smoothly to their new location. The non-transitioning items still jump around awkwardly — we can fix that in the next chapter.
+Wrap the <span> element in a key block depending on number. This will make the animation play whenever you press the increment button.
