@@ -1,54 +1,17 @@
-# [Stores  Auto-subscriptions](https://svelte.dev/tutorial/auto-subscriptions)
+# [Stores  Readable stores](https://svelte.dev/tutorial/readable-stores)
 
-The app in the previous example works, but there's a subtle bug — the store is subscribed to, but never unsubscribed. If the component was instantiated and destroyed many times, this would result in a _memory leak_.
+Not all stores should be writable by whoever has a reference to them. For example, you might have a store representing the mouse position or the user's geolocation, and it doesn't make sense to be able to set those values from 'outside'. For those cases, we have _readable_ stores.
 
-Start by declaring `unsubscribe` in `App.svelte`:
+Click over to the `stores.js` tab. The first argument to `readable` is an initial value, which can be `null` or `undefined` if you don't have one yet. The second argument is a `start` function that takes a `set` callback and returns a `stop` function. The `start` function is called when the store gets its first subscriber; `stop` is called when the last subscriber unsubscribes.
 
-```js
-const unsubscribe = count.subscribe(value => {
-  countValue = value;
+```svelte
+export const time = readable(new Date(), function start(set) {
+  const interval = setInterval(() => {
+    set(new Date());
+  }, 1000);
+
+  return function stop() {
+    clearInterval(interval);
+  };
 });
 ```
-
-> Calling a `subscribe` method returns an `unsubscribe` function.
-
-You now declared `unsubscribe`, but it still needs to be called, for example through the `onDestroy` [lifecycle hook](https://svelte.dev/tutorial/ondestroy):
-
-```svelte
-<script>
-  import { onDestroy } from 'svelte';
-  import { count } from './stores.js';
-  import Incrementer from './Incrementer.svelte';
-  import Decrementer from './Decrementer.svelte';
-  import Resetter from './Resetter.svelte';
-
-  let countValue;
-
-  const unsubscribe = count.subscribe(value => {
-    countValue = value;
-  });
-
-  onDestroy(unsubscribe);
-</script>
-
-<h1>The count is {countValue}</h1>
-```
-
-It starts to get a bit boilerplatey though, especially if your component subscribes to multiple stores. Instead, Svelte has a trick up its sleeve — you can reference a store value by prefixing the store name with `$`:
-
-```svelte
-<script>
-  import { count } from './stores.js';
-  import Incrementer from './Incrementer.svelte';
-  import Decrementer from './Decrementer.svelte';
-  import Resetter from './Resetter.svelte';
-</script>
-
-<h1>The count is {$count}</h1>
-```
-
-> Auto-subscription only works with store variables that are declared (or imported) at the top-level scope of a component.
-
-You're not limited to using `$count` inside the markup, either — you can use it anywhere in the `<script>` as well, such as in event handlers or reactive declarations.
-
-> Any name beginning with `$` is assumed to refer to a store value. It's effectively a reserved character — Svelte will prevent you from declaring your own variables with a `$` prefix.
