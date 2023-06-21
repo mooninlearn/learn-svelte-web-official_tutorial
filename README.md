@@ -1,16 +1,9 @@
-# [Props  Default values](https://svelte.dev/tutorial/default-values)
+# [Props  Spread props](https://svelte.dev/tutorial/spread-props)
 
-We can easily specify default values for props in Nested.svelte:
-
-```svelte
-<script>
-	export let answer = 'a mystery';
-</script>
-```
-
-If we now add a second component without an answer prop, it will fall back to the default:
+If you have an object of properties, you can 'spread' them onto a component instead of specifying each one:
 
 ```svelte
-<Nested answer={42}/>
-<Nested/>
+<Info {...pkg}/>
 ```
+
+> Conversely, if you need to reference all the props that were passed into a component, including ones that weren't declared with `export`, you can do so by accessing `$$props` directly. It's not generally recommended, as it's difficult for Svelte to optimise, but it's useful in rare cases.
