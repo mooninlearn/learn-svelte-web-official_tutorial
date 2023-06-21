@@ -1,20 +1,29 @@
 <script>
-	import { longpress } from './longpress.js';
-
-	let pressed = false;
-	let duration = 2000;
+	let current = 'foo';
 </script>
 
-<label>
-	<input type=range bind:value={duration} max={2000} step={100}>
-	{duration}ms
-</label>
+<button
+	class:selected="{current === 'foo'}"
+	on:click="{() => current = 'foo'}"
+>foo</button>
 
-<button use:longpress={duration}
-	on:longpress="{() => pressed = true}"
-	on:mouseenter="{() => pressed = false}"
->press and hold</button>
+<button
+	class:selected="{current === 'bar'}"
+	on:click="{() => current = 'bar'}"
+>bar</button>
 
-{#if pressed}
-	<p>congratulations, you pressed and held for {duration}ms</p>
-{/if}
+<button
+	class:selected="{current === 'baz'}"
+	on:click="{() => current = 'baz'}"
+>baz</button>
+
+<style>
+	button {
+		display: block;
+	}
+
+	.selected {
+		background-color: #ff3e00;
+		color: white;
+	}
+</style>
