@@ -1,25 +1,32 @@
-# [Events  Component events](https://svelte.dev/tutorial/component-events)
+# [Events  Event forwarding](https://svelte.dev/tutorial/event-forwarding)
 
-Components can also dispatch events. To do so, they must create an event dispatcher. Update `Inner.svelte`:
+Unlike DOM events, component events don't _bubble_. If you want to listen to an event on some deeply nested component, the intermediate components must _forward_ the event.
+
+In this case, we have the same `App.svelte` and `Inner.svelte` as in the [previous chapter](https://svelte.dev/tutorial/component-events), but there's now an `Outer.svelte` component that contains `<Inner/>`.
+
+One way we could solve the problem is adding `createEventDispatcher` to `Outer.svelte`, listening for the `message` event, and creating a handler for it:
 
 ```svelte
 <script>
+  import Inner from './Inner.svelte';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
 
-  function sayHello() {
-    dispatch('message', {
-      text: 'Hello!'
-    });
+  function forward(event) {
+    dispatch('message', event.detail);
   }
 </script>
+
+<Inner on:message={forward}/>
 ```
 
-> `createEventDispatcher` must be called when the component is first instantiated — you can't do it later inside e.g. a `setTimeout` callback. This links `dispatch` to the component instance.
+But that's a lot of code to write, so Svelte gives us an equivalent shorthand — an `on:message` event directive without a value means 'forward all `message` events'.
 
-Notice that the `App` component is listening to the messages dispatched by `Inner` component thanks to the `on:message` directive. This directive is an attribute prefixed with `on:` followed by the event name that we are dispatching (in this case, `message`).
+```svelte
+<script>
+  import Inner from './Inner.svelte';
+</script>
 
-Without this attribute, messages would still be dispatched, but the App would not react to it. You can try removing the `on:message` attribute and pressing the button again.
-
-> You can also try changing the event name to something else. For instance, change `dispatch('message')` to `dispatch('myevent')` in `Inner.svelte` and change the attribute name from `on:message` to `on:myevent` in the `App.svelte` component.
+<Inner on:message/>
+```
