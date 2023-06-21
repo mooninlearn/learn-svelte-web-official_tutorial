@@ -1,22 +1,42 @@
-# [Component composition  Slot fallbacks](https://svelte.dev/tutorial/slot-fallbacks)
+# [Component composition  Named slots](https://svelte.dev/tutorial/named-slots)
 
-A component can specify _fallbacks_ for any slots that are left empty, by putting content inside the `<slot>` element:
+The previous example contained a _default slot_, which renders the direct children of a component. Sometimes you will need more control over placement, such as with this `<ContactCard>`. In those cases, we can use _named slots_.
+
+In `ContactCard.svelte`, add a `name` attribute to each slot:
 
 ```svelte
-<div class="box">
-  <slot>
-    <em>no content was provided</em>
-  </slot>
-</div>
+<article class="contact-card">
+  <h2>
+    <slot name="name">
+      <span class="missing">Unknown name</span>
+    </slot>
+  </h2>
+
+  <div class="address">
+    <slot name="address">
+      <span class="missing">Unknown address</span>
+    </slot>
+  </div>
+
+  <div class="email">
+    <slot name="email">
+      <span class="missing">Unknown email</span>
+    </slot>
+  </div>
+</article>
 ```
 
-We can now create instances of `<Box>` without any children:
+Then, add elements with corresponding `slot="..."` attributes inside the `<ContactCard>` component:
 
 ```svelte
-<Box>
-  <h2>Hello!</h2>
-  <p>This is a box. It can contain anything.</p>
-</Box>
+<ContactCard>
+  <span slot="name">
+    P. Sherman
+  </span>
 
-<Box/>
+  <span slot="address">
+    42 Wallaby Way<br>
+    Sydney
+  </span>
+</ContactCard>
 ```
