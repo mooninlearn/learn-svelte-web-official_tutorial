@@ -1,15 +1,27 @@
-# [Logic  Else-if blocks](https://svelte.dev/tutorial/else-if-blocks)
+# [Logic  Each blocks](https://svelte.dev/tutorial/each-blocks)
 
-Multiple conditions can be 'chained' together with else if:
+If you need to loop over lists of data, use an `each` block:
 
 ```svelte
-{#if x > 10}
-	<p>{x} is greater than 10</p>
-{:else if 5 > x}
-	<p>{x} is less than 5</p>
-{:else}
-	<p>{x} is between 5 and 10</p>
-{/if}
+<ul>
+  {#each cats as cat}
+    <li><a target="_blank" href="https://www.youtube.com/watch?v={cat.id}" rel="noreferrer">
+      {cat.name}
+    </a></li>
+  {/each}
+</ul>
 ```
 
-> A `#` character always indicates a _block opening_ tag. A `/` character always indicates a _block closing_ tag. A `:` character, as in `{:else}`, indicates a _block continuation_ tag. Don't worry — you've already learned almost all the syntax Svelte adds to HTML.
+> The expression (`cats`, in this case) can be any array or array-like object (i.e. it has a `length` property). You can loop over generic iterables with `each [...iterable]`.
+
+You can get the current _index_ as a second argument, like so:
+
+```svelte
+{#each cats as cat, i}
+  <li><a target="_blank" href="https://www.youtube.com/watch?v={cat.id}" rel="noreferrer">
+    {i + 1}: {cat.name}
+  </a></li>
+{/each}
+```
+
+If you prefer, you can use destructuring — `each cats as { id, name }` — and replace `cat.id` and `cat.name` with `id` and `name`.
