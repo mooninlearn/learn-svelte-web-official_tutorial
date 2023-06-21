@@ -1,46 +1,44 @@
-# [Actions  The use directive](https://svelte.dev/tutorial/actions)
+# [Actions  Adding parameters](https://svelte.dev/tutorial/adding-parameters-to-actions)
 
-Actions are essentially element-level lifecycle functions. They're useful for things like:
+Like transitions and animations, an action can take an argument, which the action function will be called with alongside the element it belongs to.
 
-- interfacing with third-party libraries
-- lazy-loaded images
-- tooltips
-- adding custom event handlers
+Here, we're using a `longpress` action that fires an event with the same name whenever the user presses and holds the button for a given duration. Right now, if you switch over to the `longpress.js` file, you'll see it's hardcoded to 500ms.
 
-In this app, we want to make the orange modal close when the user clicks outside it. It has an event handler for the `outclick` event, but it isn't a native DOM event. We have to dispatch it ourselves. First, import the `clickOutside` function...
+We can change the action function to accept a `duration` as a second argument, and pass that `duration` to the `setTimeout` call:
 
 ```js
-import { clickOutside } from "./click_outside.js";
-```
+export function longpress(node, duration) {
+  // ...
 
-...then use it with the element:
-
-```svelte
-<div class="box" use:clickOutside on:outclick="{() => (showModal = false)}">
-  Click outside me!
-</div>
-```
-
-Open the `click_outside.js` file. Like transition functions, an action function receives a `node` (which is the element that the action is applied to) and some optional parameters, and returns an action object. That object can have a `destroy` function, which is called when the element is unmounted.
-
-We want to fire the `outclick` event when the user clicks outside the orange box. One possible implementation looks like this:
-
-```js
-export function clickOutside(node) {
-  const handleClick = (event) => {
-    if (!node.contains(event.target)) {
-      node.dispatchEvent(new CustomEvent("outclick"));
-    }
+  const handleMousedown = () => {
+    timer = setTimeout(() => {
+      node.dispatchEvent(
+        new CustomEvent('longpress')
+      );
+    }, duration);
   };
 
-  document.addEventListener("click", handleClick, true);
-
-  return {
-    destroy() {
-      document.removeEventListener("click", handleClick, true);
-    },
-  };
+  // ...
 }
 ```
 
-Update the `clickOutside` function, click the button to show the modal and then click outside it to close it.
+Back in `App.svelte`, we can pass the `duration` value to the action:
+
+```svelte
+<button use:longpress={duration} />
+```
+
+This _almost_ works — the event now only fires after 2 seconds. But if you slide the duration down, it will still take two seconds.
+
+To change that, we can add an `update` method in `longpress.js`. This will be called whenever the argument changes:
+
+```js
+return {
+  update(newDuration) {
+    duration = newDuration;
+  },
+  // ...
+};
+```
+
+> If you need to pass multiple arguments to an action, combine them into a single object, as in `use:longpress={{duration, spiciness}}`
