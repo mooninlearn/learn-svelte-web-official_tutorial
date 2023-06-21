@@ -1,27 +1,19 @@
-# [Logic  Each blocks](https://svelte.dev/tutorial/each-blocks)
+# [Logic  Keyed each blocks](https://svelte.dev/tutorial/keyed-each-blocks)
 
-If you need to loop over lists of data, use an `each` block:
+By default, when you modify the value of an `each` block, it will add and remove items at the _end_ of the block, and update any values that have changed. That might not be what you want.
 
-```svelte
-<ul>
-  {#each cats as cat}
-    <li><a target="_blank" href="https://www.youtube.com/watch?v={cat.id}" rel="noreferrer">
-      {cat.name}
-    </a></li>
-  {/each}
-</ul>
-```
+It's easier to show why than to explain. Click to expand the `Console`, then click the 'Remove first thing' button a few times, and notice what happens: it does not remove the first `<Thing>` component, but rather the _last_ DOM node. Then it updates the `name` value in the remaining DOM nodes, but not the emoji.
 
-> The expression (`cats`, in this case) can be any array or array-like object (i.e. it has a `length` property). You can loop over generic iterables with `each [...iterable]`.
+Instead, we'd like to remove only the first `<Thing>` component and its DOM node, and leave the others unaffected.
 
-You can get the current _index_ as a second argument, like so:
+To do that, we specify a unique identifier (or "key") for the `each` block:
 
 ```svelte
-{#each cats as cat, i}
-  <li><a target="_blank" href="https://www.youtube.com/watch?v={cat.id}" rel="noreferrer">
-    {i + 1}: {cat.name}
-  </a></li>
+{#each things as thing (thing.id)}
+  <Thing name={thing.name}/>
 {/each}
 ```
 
-If you prefer, you can use destructuring — `each cats as { id, name }` — and replace `cat.id` and `cat.name` with `id` and `name`.
+Here, `(thing.id)` is the _key_, which tells Svelte how to figure out which DOM node to change when the component updates.
+
+> You can use any object as the key, as Svelte uses a `Map` internally — in other words you could do `(thing)` instead of `(thing.id)`. Using a string or number is generally safer, however, since it means identity persists without referential equality, for example when updating with fresh data from an API server.
