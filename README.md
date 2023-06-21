@@ -1,16 +1,21 @@
-# [Bindings  Contenteditable bindings](https://svelte.dev/tutorial/contenteditable-bindings)
+# [Bindings  Each block bindings](https://svelte.dev/tutorial/each-block-bindings)
 
-Elements with the `contenteditable` attribute support the following bindings:
-
-- [`innerHTML`](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML)
-- [`innerText`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText)
-- [`textContent`](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)
-
-There are slight differences between each of these, read more about them [here](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent#Differences_from_innerText).
+You can even bind to properties inside an `each` block.
 
 ```svelte
-<div
-contenteditable="true"
-bind:innerHTML={html}
-></div>
+{#each todos as todo}
+  <div class:done={todo.done}>
+  <input
+    type=checkbox
+    bind:checked={todo.done}
+  >
+
+  <input
+    placeholder="What needs to be done?"
+    bind:value={todo.text}
+  >
+  </div>
+{/each}
 ```
+
+> Note that interacting with these `<input>` elements will mutate the array. If you prefer to work with immutable data, you should avoid these bindings and use event handlers instead.
