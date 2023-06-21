@@ -1,9 +1,21 @@
-# [Props  Spread props](https://svelte.dev/tutorial/spread-props)
+# [Logic  If blocks](https://svelte.dev/tutorial/if-blocks)
 
-If you have an object of properties, you can 'spread' them onto a component instead of specifying each one:
+HTML doesn't have a way of expressing _logic_, like conditionals and loops. Svelte does.
+
+To conditionally render some markup, we wrap it in an `if` block:
 
 ```svelte
-<Info {...pkg}/>
+{#if user.loggedIn}
+  <button on:click={toggle}>
+    Log out
+  </button>
+{/if}
+
+{#if !user.loggedIn}
+  <button on:click={toggle}>
+    Log in
+  </button>
+{/if}
 ```
 
-> Conversely, if you need to reference all the props that were passed into a component, including ones that weren't declared with `export`, you can do so by accessing `$$props` directly. It's not generally recommended, as it's difficult for Svelte to optimise, but it's useful in rare cases.
+Try it — update the component, and click on the buttons.
