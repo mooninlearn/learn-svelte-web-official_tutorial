@@ -1,19 +1,25 @@
-# [Lifecycle  tick](https://svelte.dev/tutorial/tick)
+# [Stores  Writable stores](https://svelte.dev/tutorial/writable-stores)
 
-The `tick` function is unlike other lifecycle functions in that you can call it any time, not just when the component first initialises. It returns a promise that resolves as soon as any pending state changes have been applied to the DOM (or immediately, if there are no pending state changes).
+Not all application state belongs inside your application's component hierarchy. Sometimes, you'll have values that need to be accessed by multiple unrelated components, or by a regular JavaScript module.
 
-When you update component state in Svelte, it doesn't update the DOM immediately. Instead, it waits until the next _microtask_ to see if there are any other changes that need to be applied, including in other components. Doing so avoids unnecessary work and allows the browser to batch things more effectively.
+In Svelte, we do this with _stores_. A store is simply an object with a `subscribe` method that allows interested parties to be notified whenever the store value changes. In `App.svelte`, `count` is a store, and we're setting `countValue` in the `count.subscribe` callback.
 
-You can see that behaviour in this example. Select a range of text and hit the tab key. Because the `<textarea>` value changes, the current selection is cleared and the cursor jumps, annoyingly, to the end. We can fix this by importing `tick`...
+Click the `stores.js` tab to see the definition of `count`. It's a _writable_ store, which means it has `set` and `update` methods in addition to `subscribe`.
+
+Now go to the `Incrementer.svelte` tab so that we can wire up the `+` button:
 
 ```js
-import { tick } from 'svelte';
+function increment() {
+  count.update(n => n + 1);
+}
 ```
 
-...and running it immediately before we set `this.selectionStart` and `this.selectionEnd` at the end of `handleKeydown`:
+Clicking the `+` button should now update the count. Do the inverse for `Decrementer.svelte`.
+
+Finally, in `Resetter.svelte`, implement `reset`:
 
 ```js
-await tick();
-this.selectionStart = selectionStart;
-this.selectionEnd = selectionEnd;
+function reset() {
+  count.set(0);
+}
 ```
