@@ -7,3 +7,6 @@ _*/
 !.vscode/extensions.json
 .idea
 .DS_Store
+
+# Secrets
+.env

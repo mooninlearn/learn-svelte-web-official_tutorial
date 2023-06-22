@@ -22,7 +22,9 @@
   "main": "dist/index.js",
   "author": "Moon In Learn <mooninlearn@gmail.com>",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "elizabot": "^0.0.3",
+    "mapbox-gl": "^2.15.0",
     "marked": "^5.1.0"
   }
 }
