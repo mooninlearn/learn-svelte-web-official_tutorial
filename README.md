@@ -1,13 +1,13 @@
-# [Special tags  The @debug tag](https://svelte.dev/tutorial/debug)
+# [Special tags  HTML tags](https://svelte.dev/tutorial/html-tags)
 
-Occasionally, it's useful to inspect a piece of data as it flows through your app.
+Ordinarily, strings are inserted as plain text, meaning that characters like `<` and `>` have no special meaning.
 
-One approach is to use `console.log(...)` inside your markup. If you want to pause execution, though, you can use the `{@debug ...}` tag with a comma-separated list of values you want to inspect:
+But sometimes you need to render HTML directly into a component. For example, the words you're reading right now exist in a markdown file that gets included on this page as a blob of HTML.
+
+In Svelte, you do this with the special `{@html ...}` tag:
 
 ```svelte
-{@debug user}
-
-<h1>Hello {user.firstname}!</h1>
+<p>{@html string}</p>
 ```
 
-If you now open your devtools and start interacting with the `<input>` elements, you'll trigger the debugger as the value of `user` changes.
+> **Warning!** Svelte doesn't perform any sanitization of the expression inside `{@html ...}` before it gets inserted into the DOM. In other words, if you use this feature it's **critical** that you manually escape HTML that comes from sources you don't trust, otherwise you risk exposing your users to XSS attacks.

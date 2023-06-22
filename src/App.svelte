@@ -1,13 +1,5 @@
 <script>
-	let user = {
-		firstname: 'Ada',
-		lastname: 'Lovelace'
-	};
+	let string = `this string contains some <strong>HTML!!!</strong>`;
 </script>
 
-<input bind:value={user.firstname}>
-<input bind:value={user.lastname}>
-
-{@debug user}
-
-<h1>Hello {user.firstname}!</h1>
+<p>{@html string}</p>
