@@ -1,19 +1,11 @@
-# [Special elements  sveltewindow bindings](https://svelte.dev/tutorial/svelte-window-bindings)
+# [Special elements  sveltedocument](https://svelte.dev/tutorial/svelte-document)
 
-We can also bind to certain properties of `window`, such as `scrollY`. Update line 7:
+Similar to `<svelte:window>`, the `<svelte:document>` element allows you to listen for events that fire on `document`. This is useful with events like `selectionchange`, which doesn't fire on `window`.
 
+Add the `selectionchange` handler to the `<svelte:document>` tag:
+
+```svelte
+<svelte:document on:selectionchange={handleSelectionChange} />
 ```
-<svelte:window bind:scrollY={y}/>
-```
 
-The list of properties you can bind to is as follows:
-
-- `innerWidth`
-- `innerHeight`
-- `outerWidth`
-- `outerHeight`
-- `scrollX`
-- `scrollY`
-- `online` — an alias for `window.navigator.onLine`
-
-All except `scrollX` and `scrollY` are readonly.
+> Avoid `mouseenter` and `mouseleave` handlers on this element, these events are not fired on `document` in all browsers. Use `<svelte:body>` for this instead.
