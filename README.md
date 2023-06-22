@@ -1,12 +1,11 @@
-# [Special elements  sveltebody](https://svelte.dev/tutorial/svelte-body)
+# [Special elements  sveltehead](https://svelte.dev/tutorial/svelte-head)
 
-Similar to `<svelte:window>` and `<svelte:document>`, the `<svelte:body>` element allows you to listen for events that fire on `document.body`. This is useful with the `mouseenter` and `mouseleave` events, which don't fire on `window`.
-
-Add the `mouseenter` and `mouseleave` handlers to the `<svelte:body>` tag:
+The `<svelte:head>` element allows you to insert elements inside the `<head>` of your document:
 
 ```svelte
-<svelte:body
-  on:mouseenter={handleMouseenter}
-  on:mouseleave={handleMouseleave}
-/>
+<svelte:head>
+<link rel="stylesheet" href="/tutorial/dark-theme.css">
+</svelte:head>
 ```
+
+> In server-side rendering (SSR) mode, contents of `<svelte:head>` are returned separately from the rest of your HTML.
