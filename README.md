@@ -1,13 +1,9 @@
-# [Special tags  HTML tags](https://svelte.dev/tutorial/html-tags)
+# [Next steps  Congratulations!](https://svelte.dev/tutorial/congratulations)
 
-Ordinarily, strings are inserted as plain text, meaning that characters like `<` and `>` have no special meaning.
+You've now finished the Svelte tutorial and are ready to start building apps. You can refer back to individual chapters at any time (click the title above to reveal a dropdown) or continue your learning via the [API reference](https://svelte.dev/docs), [Examples](https://svelte.dev/examples) and [Blog](https://svelte.dev/blog). If you're a Twitter user, you can get updates via [@sveltejs](https://twitter.com/sveltejs).
 
-But sometimes you need to render HTML directly into a component. For example, the words you're reading right now exist in a markdown file that gets included on this page as a blob of HTML.
+To get set up in your local development environment, check out [the quickstart guide](https://svelte.dev/docs#getting-started).
 
-In Svelte, you do this with the special `{@html ...}` tag:
+If you're looking for a more expansive framework that includes routing, server-side rendering and everything else, take a look at [SvelteKit](https://kit.svelte.dev).
 
-```svelte
-<p>{@html string}</p>
-```
-
-> **Warning!** Svelte doesn't perform any sanitization of the expression inside `{@html ...}` before it gets inserted into the DOM. In other words, if you use this feature it's **critical** that you manually escape HTML that comes from sources you don't trust, otherwise you risk exposing your users to XSS attacks.
+Most importantly: since you're now a member of the Svelte community, you should [join our friendly Discord chatroom](https://svelte.dev/chat). That's where you'll find fellow Svelte users, and it's where we plan the future of the framework.
