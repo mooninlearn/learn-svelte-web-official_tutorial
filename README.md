@@ -1,28 +1,33 @@
-# [Special elements  svelteoptions](https://svelte.dev/tutorial/svelte-options)
+# [Special elements  sveltefragment](https://svelte.dev/tutorial/svelte-fragment)
 
-The `<svelte:options>` element allows you to specify compiler options.
+The `<svelte:fragment>` element allows you to place content in a named slot without wrapping it in a container DOM element. This keeps the flow layout of your document intact.
 
-We'll use the `immutable` option as an example. In this app, the `<Todo>` component flashes whenever it receives new data. Clicking on one of the items toggles its `done` state by creating an updated `todos` array. This causes the _other_ `<Todo>` items to flash, even though they don't end up making any changes to the DOM.
-
-We can optimise this by telling the `<Todo>` component to expect _immutable_ data. This means that we're promising never to _mutate_ the `todo` prop, but will instead create new todo objects whenever things change.
-
-Add this to the top of the `Todo.svelte` file:
+In the example notice how we applied a flex layout with a gap of `1em` to the box.
 
 ```svelte
-<svelte:options immutable={true}/>
+<!-- Box.svelte -->
+<div class="box">
+  <slot name="header">No header was provided</slot>
+    <p>Some content between header and footer</p>
+  <slot name="footer"></slot>
+</div>
+
+<style>
+  .box {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+</style>
 ```
 
-> You can shorten this to `<svelte:options immutable/>` if you prefer.
+However, the content in the footer is not spaced out according to this rhythm because wrapping it in a div created a new flow layout.
 
-Now, when you toggle todos by clicking on them, only the updated component flashes.
+We can solve this by changing `<div slot="footer">` in the `App` component. Replace the `<div>` with `<svelte:fragment>`:
 
-The options that can be set here are:
-
-- `immutable={true}` — you never use mutable data, so the compiler can do simple referential equality checks to determine if values have changed
-- `immutable={false}` — the default. Svelte will be more conservative about whether or not mutable objects have changed
-- `accessors={true}` — adds getters and setters for the component's props
-- `accessors={false}` — the default
-- `namespace="..."` — the namespace where this component will be used, most commonly `"svg"`
-- `tag="..."` — the name to use when compiling this component as a custom element
-
-Consult the [API reference](https://svelte.dev/docs) for more information on these options.
+```svelte
+<svelte:fragment slot="footer">
+  <p>All rights reserved.</p>
+  <p>Copyright (c) 2019 Svelte Industries</p>
+</svelte:fragment>
+```
