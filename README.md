@@ -1,21 +1,11 @@
-# [Special elements  sveltecomponent](https://svelte.dev/tutorial/svelte-element)
+# [Special elements  sveltewindow](https://svelte.dev/tutorial/svelte-window)
 
-Sometimes we don't know in advance what kind of DOM element to render. `<svelte:element>` comes in handy here. Instead of a sequence of `if` blocks...
+Just as you can add event listeners to any DOM element, you can add event listeners to the `window` object with `<svelte:window>`.
 
-```svelte
-{#if selected === 'h1'}
-  <h1>I'm a h1 tag</h1>
-{:else if selected === 'h3'}
-  <h3>I'm a h3 tag</h3>
-{:else if selected === 'p'}
-  <p>I'm a p tag</p>
-{/if}
-```
-
-...we can have a single dynamic component:
+On line 11, add the `keydown` listener:
 
 ```svelte
-<svelte:element this={selected}>I'm a {selected} tag</svelte:element>
+<svelte:window on:keydown={handleKeydown}/>
 ```
 
-The `this` value can be any string, or a falsy value — if it's falsy, no element is rendered.
+> As with DOM elements, you can add [event modifiers](https://svelte.dev/tutorial/event-modifiers) like `preventDefault`.
