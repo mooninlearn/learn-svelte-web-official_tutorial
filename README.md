@@ -1,33 +1,22 @@
-# [Special elements  sveltefragment](https://svelte.dev/tutorial/svelte-fragment)
+# [Module context  Sharing code](https://svelte.dev/tutorial/sharing-code)
 
-The `<svelte:fragment>` element allows you to place content in a named slot without wrapping it in a container DOM element. This keeps the flow layout of your document intact.
+In all the examples we've seen so far, the `<script>` block contains code that runs when each component instance is initialised. For the vast majority of components, that's all you'll ever need.
 
-In the example notice how we applied a flex layout with a gap of `1em` to the box.
+Very occasionally, you'll need to run some code outside of an individual component instance. For example, you can play all five of these audio players simultaneously; it would be better if playing one stopped all the others.
+
+We can do that by declaring a `<script context="module">` block. Code contained inside it will run once, when the module first evaluates, rather than when a component is instantiated. Place this at the top of `AudioPlayer.svelte`:
 
 ```svelte
-<!-- Box.svelte -->
-<div class="box">
-  <slot name="header">No header was provided</slot>
-    <p>Some content between header and footer</p>
-  <slot name="footer"></slot>
-</div>
-
-<style>
-  .box {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-  }
-</style>
+<script context="module">
+  let current;
+</script>
 ```
 
-However, the content in the footer is not spaced out according to this rhythm because wrapping it in a div created a new flow layout.
+It's now possible for the components to 'talk' to each other without any state management:
 
-We can solve this by changing `<div slot="footer">` in the `App` component. Replace the `<div>` with `<svelte:fragment>`:
-
-```svelte
-<svelte:fragment slot="footer">
-  <p>All rights reserved.</p>
-  <p>Copyright (c) 2019 Svelte Industries</p>
-</svelte:fragment>
+```js
+function stopOthers() {
+  if (current && current !== audio) current.pause();
+  current = audio;
+}
 ```
