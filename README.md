@@ -1,11 +1,12 @@
-# [Special elements  sveltedocument](https://svelte.dev/tutorial/svelte-document)
+# [Special elements  sveltebody](https://svelte.dev/tutorial/svelte-body)
 
-Similar to `<svelte:window>`, the `<svelte:document>` element allows you to listen for events that fire on `document`. This is useful with events like `selectionchange`, which doesn't fire on `window`.
+Similar to `<svelte:window>` and `<svelte:document>`, the `<svelte:body>` element allows you to listen for events that fire on `document.body`. This is useful with the `mouseenter` and `mouseleave` events, which don't fire on `window`.
 
-Add the `selectionchange` handler to the `<svelte:document>` tag:
+Add the `mouseenter` and `mouseleave` handlers to the `<svelte:body>` tag:
 
 ```svelte
-<svelte:document on:selectionchange={handleSelectionChange} />
+<svelte:body
+  on:mouseenter={handleMouseenter}
+  on:mouseleave={handleMouseleave}
+/>
 ```
-
-> Avoid `mouseenter` and `mouseleave` handlers on this element, these events are not fired on `document` in all browsers. Use `<svelte:body>` for this instead.

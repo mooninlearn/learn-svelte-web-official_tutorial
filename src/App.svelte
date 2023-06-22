@@ -1,10 +1,37 @@
 <script>
-	let selection = '';
+	let hereKitty = false;
 
-	const handleSelectionChange = (e) => selection = document.getSelection();
+	const handleMouseenter = () => hereKitty = true;
+	const handleMouseleave = () => hereKitty = false;
 </script>
 
-<svelte:document on:selectionchange={handleSelectionChange} />
+<svelte:body
+	on:mouseenter={handleMouseenter}
+	on:mouseleave={handleMouseleave}
+/>
 
-<p>Select this text to fire events</p>
-<p>Selection: {selection}</p>
+<!-- creative commons BY-NC http://www.pngall.com/kitten-png/download/7247 -->
+<img
+	class:curious={hereKitty}
+	alt="Kitten wants to know what's going on"
+	src="https://svelte.dev/tutorial/kitten.png"
+>
+
+<style>
+	img {
+		position: absolute;
+		left: 0;
+		bottom: -60px;
+		transform: translate(-80%, 0) rotate(-30deg);
+		transform-origin: 100% 100%;
+		transition: transform 0.4s;
+	}
+
+	.curious {
+		transform: translate(-15%, 0) rotate(0deg);
+	}
+
+	:global(body) {
+		overflow: hidden;
+	}
+</style>
