@@ -1,22 +1,33 @@
-# [Module context  Sharing code](https://svelte.dev/tutorial/sharing-code)
+# [Module context  Exports](https://svelte.dev/tutorial/module-exports)
 
-In all the examples we've seen so far, the `<script>` block contains code that runs when each component instance is initialised. For the vast majority of components, that's all you'll ever need.
+Anything exported from a `context="module"` script block becomes an export from the module itself. If we export a `stopAll` function from `AudioPlayer.svelte`...
 
-Very occasionally, you'll need to run some code outside of an individual component instance. For example, you can play all five of these audio players simultaneously; it would be better if playing one stopped all the others.
-
-We can do that by declaring a `<script context="module">` block. Code contained inside it will run once, when the module first evaluates, rather than when a component is instantiated. Place this at the top of `AudioPlayer.svelte`:
-
-```svelte
+```js
 <script context="module">
-  let current;
+  const elements = new Set();
+
+  export function stopAll() {
+    elements.forEach(element => {
+      element.pause();
+    });
+  }
 </script>
 ```
 
-It's now possible for the components to 'talk' to each other without any state management:
+...we can then import it in `App.svelte`...
 
-```js
-function stopOthers() {
-  if (current && current !== audio) current.pause();
-  current = audio;
-}
+```svelte
+<script>
+  import AudioPlayer, { stopAll } from './AudioPlayer.svelte';
+</script>
 ```
+
+...and use it in an event handler:
+
+```svelte
+<button on:click={stopAll}>
+  stop all audio
+</button>
+```
+
+> You can't have a default export, because the component _is_ the default export.
