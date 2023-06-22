@@ -1,21 +1,21 @@
-# [Special elements  sveltecomponent](https://svelte.dev/tutorial/svelte-component)
+# [Special elements  sveltecomponent](https://svelte.dev/tutorial/svelte-element)
 
-A component can change its category altogether with `<svelte:component>`. Instead of a sequence of `if` blocks...
+Sometimes we don't know in advance what kind of DOM element to render. `<svelte:element>` comes in handy here. Instead of a sequence of `if` blocks...
 
 ```svelte
-{#if selected.color === 'red'}
-  <RedThing/>
-{:else if selected.color === 'green'}
-  <GreenThing/>
-{:else if selected.color === 'blue'}
-  <BlueThing/>
+{#if selected === 'h1'}
+  <h1>I'm a h1 tag</h1>
+{:else if selected === 'h3'}
+  <h3>I'm a h3 tag</h3>
+{:else if selected === 'p'}
+  <p>I'm a p tag</p>
 {/if}
 ```
 
 ...we can have a single dynamic component:
 
 ```svelte
-<svelte:component this={selected.component}/>
+<svelte:element this={selected}>I'm a {selected} tag</svelte:element>
 ```
 
-The `this` value can be any component constructor, or a falsy value — if it's falsy, no component is rendered.
+The `this` value can be any string, or a falsy value — if it's falsy, no element is rendered.
