@@ -1,33 +1,13 @@
-# [Module context  Exports](https://svelte.dev/tutorial/module-exports)
+# [Special tags  The @debug tag](https://svelte.dev/tutorial/debug)
 
-Anything exported from a `context="module"` script block becomes an export from the module itself. If we export a `stopAll` function from `AudioPlayer.svelte`...
+Occasionally, it's useful to inspect a piece of data as it flows through your app.
 
-```js
-<script context="module">
-  const elements = new Set();
-
-  export function stopAll() {
-    elements.forEach(element => {
-      element.pause();
-    });
-  }
-</script>
-```
-
-...we can then import it in `App.svelte`...
+One approach is to use `console.log(...)` inside your markup. If you want to pause execution, though, you can use the `{@debug ...}` tag with a comma-separated list of values you want to inspect:
 
 ```svelte
-<script>
-  import AudioPlayer, { stopAll } from './AudioPlayer.svelte';
-</script>
+{@debug user}
+
+<h1>Hello {user.firstname}!</h1>
 ```
 
-...and use it in an event handler:
-
-```svelte
-<button on:click={stopAll}>
-  stop all audio
-</button>
-```
-
-> You can't have a default export, because the component _is_ the default export.
+If you now open your devtools and start interacting with the `<input>` elements, you'll trigger the debugger as the value of `user` changes.
