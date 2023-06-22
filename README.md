@@ -1,23 +1,21 @@
-# [Special elements  svelteself](https://svelte.dev/tutorial/svelte-self)
+# [Special elements  sveltecomponent](https://svelte.dev/tutorial/svelte-component)
 
-Svelte provides a variety of built-in elements. The first, `<svelte:self>`, allows a component to contain itself recursively.
-
-It's useful for things like this folder tree view, where folders can contain _other_ folders. In `Folder.svelte` we want to be able to do this...
+A component can change its category altogether with `<svelte:component>`. Instead of a sequence of `if` blocks...
 
 ```svelte
-{#if file.files}
-  <Folder {...file}/>
-{:else}
-  <File {...file}/>
+{#if selected.color === 'red'}
+  <RedThing/>
+{:else if selected.color === 'green'}
+  <GreenThing/>
+{:else if selected.color === 'blue'}
+  <BlueThing/>
 {/if}
 ```
 
-...but that's impossible, because a module can't import itself. Instead, we use `<svelte:self>`:
+...we can have a single dynamic component:
 
 ```svelte
-{#if file.files}
-  <svelte:self {...file}/>
-{:else}
-  <File {...file}/>
-{/if}
+<svelte:component this={selected.component}/>
 ```
+
+The `this` value can be any component constructor, or a falsy value — if it's falsy, no component is rendered.

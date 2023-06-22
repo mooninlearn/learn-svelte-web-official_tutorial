@@ -1,37 +1,21 @@
 <script>
-	import Folder from './Folder.svelte';
+	import RedThing from './RedThing.svelte';
+	import GreenThing from './GreenThing.svelte';
+	import BlueThing from './BlueThing.svelte';
 
-	let root = [
-		{
-			name: 'Important work stuff',
-			files: [
-				{ name: 'quarterly-results.xlsx' }
-			]
-		},
-		{
-			name: 'Animal GIFs',
-			files: [
-				{
-					name: 'Dogs',
-					files: [
-						{ name: 'treadmill.gif' },
-						{ name: 'rope-jumping.gif' }
-					]
-				},
-				{
-					name: 'Goats',
-					files: [
-						{ name: 'parkour.gif' },
-						{ name: 'rampage.gif' }
-					]
-				},
-				{ name: 'cat-roomba.gif' },
-				{ name: 'duck-shuffle.gif' },
-				{ name: 'monkey-on-a-pig.gif' }
-			]
-		},
-		{ name: 'TODO.md' }
+	const options = [
+		{ color: 'red',   component: RedThing   },
+		{ color: 'green', component: GreenThing },
+		{ color: 'blue',  component: BlueThing  },
 	];
+
+	let selected = options[0];
 </script>
 
-<Folder name="Home" files={root} expanded/>
+<select bind:value={selected}>
+	{#each options as option}
+		<option value={option}>{option.color}</option>
+	{/each}
+</select>
+
+<svelte:component this={selected.component}/>
